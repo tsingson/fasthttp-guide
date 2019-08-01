@@ -8,7 +8,7 @@
 
 ## 1. fasthttp server side
 
-define fasthttp server
+### 1.1 define fasthttp server
 ```
 
 type webServer struct {
@@ -53,14 +53,46 @@ func (ws *webServer) Run() (err error) {
 
 ```
 
-router
+### 1.2 router
+yes ,  [fasthttp router](https://github.com/fasthttp/router)
+
+what is **ws.Recovery**?
+
+**YES, it's middleware**
+
 ```
 func (ws *webServer) muxRouter() {
-	ws.router.GET("/", recovery(ws.hello()))
-	ws.router.GET("/get", recovery(ws.testGet()))
-	ws.router.POST("/post", recovery(ws.testPost()))
+	ws.router.GET("/", ws.Recovery(ws.hello()))
+	ws.router.GET("/get", ws.Recovery(ws.testGet()))
+	ws.router.POST("/post", ws.Recovery(ws.testPost()))
 }
+
 ```
+
+**middleware**, cool.....
+```
+
+func (ws *webServer)   Recovery(next func(ctx *fasthttp.RequestCtx)) func(ctx *fasthttp.RequestCtx) {
+	fn := func(ctx *fasthttp.RequestCtx) {
+		defer func() {
+			if rvr := recover(); rvr != nil {
+				ctx.Error("recover", 500)
+			}
+		}()
+		// your middleware logic here
+
+
+		// do next
+		next(ctx)
+	}
+	return fn
+}
+
+```
+
+### 1.3 handler
+
+
 
 a POST handler via fasthttp
 ```
@@ -87,10 +119,12 @@ func (ws *webServer) testPost() func(ctx *fasthttp.RequestCtx) {
 
 ```
 
-running fasthttp web-server
+### 1.4  running fasthttp web-server
 ```
 	var s = webserver.DefaultServer()
-...
+ 
+ 
+ 
 	s.Run()
 	
 ```
@@ -98,9 +132,9 @@ running fasthttp web-server
 
 ## 2. fasthttp client side
 
-web client visa fasthttp
-```
+### 2.1 define web client struct via fasthttp client 
 
+```
 type WebClient struct {
 	BaseURI        string
 	TransactionID  string
@@ -129,7 +163,7 @@ func Default() *WebClient {
 }
 ```
 
-a GET client
+### 2.2 define a GET method
 ```
 
 // FastGet do GET request via fasthttp
@@ -194,7 +228,7 @@ func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 ```
 
 
-call  GET
+### 1.3 call  a GET request  method
 ```
 	var w = webclient.Default()
 	w.Debug = true
