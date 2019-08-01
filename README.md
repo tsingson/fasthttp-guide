@@ -218,7 +218,7 @@ func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 		log.Debug(w.TransactionID, zap.String("http payload", gotils.B2S(resp.Body())))
 	}
 
-	// add your logic code here 
+	// add your logic code here , to handle response 
 	
 	var out = fasthttp.AcquireResponse()
 	resp.CopyTo(out)
