@@ -23,7 +23,10 @@ func main() {
 	undo := zap.RedirectStdLog(s.Log)
 	defer undo()
 
-	s.Run()
+	var err = s.Run()
+	if err != nil {
+		panic("server start fail")
+	}
 	// select {}
 	<-stopSignal
 }
