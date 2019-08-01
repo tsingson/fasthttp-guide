@@ -219,12 +219,27 @@ call  GET
 
 
 
-**build**
+### 3.1 **clone**
 ```
+export GOBIN=~/bin
+
+cd ~
+mkdir go-project
+cd go-project
+
+git clone https://github.com/tsingson/fasthttp-example
+cd ./fasthttp-example
+
+go mod download
+```
+
+### 3.2 **build**
+```
+
 go install  -gcflags=-trimpath=OPATH -asmflags=-trimpath=OPATH -ldflags "-w -s" ./cmd/... 
 ```
 
-**run** in two terminal
+### 3.3 **run** in two terminal
 
 terminal 1
 ```
@@ -294,4 +309,9 @@ client side
 2019-08-02T06:23:38.677+0800	DEBUG	4294967298	webserver/testHandler.go:53	4294967298	{"http payload": "{\"actual_start_date\":\"2019-07-29\",\"actual_end_date\":\"2019-07-29\",\"plan_start_date\":\"2019-07-29\",\"plan_end_date\":\"2019-02-12\",\"title\":\"养殖计划00002\",\"user_id\":2098735545843717147}"}
 ```
 
+
+## 4.  license
+MIT
+
+by tsingson 2019
 
