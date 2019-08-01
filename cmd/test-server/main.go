@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"runtime"
 
+	"github.com/tsingson/fasthttp-example/webserver"
 	"go.uber.org/zap"
-"github.com/tsingson/fasthttp-example/webserver"
-
 )
 
 func main() {

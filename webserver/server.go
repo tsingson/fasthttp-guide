@@ -13,14 +13,12 @@ import (
 )
 
 const (
-	AcceptJson = "application/json"
-	AcceptRest = "application/vnd.pgrst.object+json"
+	AcceptJson  = "application/json"
+	AcceptRest  = "application/vnd.pgrst.object+json"
 	ContentText = "text/plain; charset=utf8"
 	ContentRest = "application/vnd.pgrst.object+json; charset=utf-8"
 	ContentJson = "application/json; charset=utf-8"
 )
-
-
 
 type webServer struct {
 	Config WebConfig
