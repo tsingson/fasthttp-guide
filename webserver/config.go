@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// WebConfig configuration for fasthttp
+// WebConfig configuration for fasthttp, copy from fasthttp
 type WebConfig struct {
 
 	// Server name for sending in response headers.
@@ -172,6 +172,7 @@ type WebConfig struct {
 	KeepHijackedConns bool
 }
 
+// Default   set fasthttp server default configuration
 func Default() WebConfig {
 	return WebConfig{
 		Name:               ServerName,

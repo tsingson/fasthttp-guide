@@ -3,8 +3,9 @@ package main
 import (
 	"github.com/sanity-io/litter"
 	"github.com/savsgio/gotils"
-	"github.com/tsingson/fasthttp-example/webclient"
 	"github.com/valyala/fasthttp"
+
+	"github.com/tsingson/fasthttp-example/webclient"
 )
 
 func main() {
@@ -22,6 +23,7 @@ func main() {
 	if resp != nil {
 		litter.Dump(gotils.B2S(resp.Body()))
 	}
+	// clean-up
 	fasthttp.ReleaseResponse(resp)
 	w.Authentication = false
 	url = "http://localhost:3001/post"
@@ -38,6 +40,7 @@ func main() {
 	if resp1 != nil {
 		litter.Dump(gotils.B2S(resp1.Body()))
 	}
+	// clenn-up
 	fasthttp.ReleaseResponse(resp1)
 
 }

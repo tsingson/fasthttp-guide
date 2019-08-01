@@ -52,19 +52,13 @@ func NewServer(cfg WebConfig) *webServer {
 
 // NewServer  new fasthttp webServer
 func DefaultServer() *webServer {
-
-	// var path, err = utils.GetCurrentExecDir()
-	// if err != nil {
-	//
-	// }
-
-	// logPath := path + "/Log"
-	// log := zaplogger.NewZapLog(logPath, "vkmsa", true)
 	var log = zaplogger.ConsoleDebug()
 
+	var cfg = Default()
+
 	s := &webServer{
-		Config: Default(),
-		addr:   ":3001",
+		Config: cfg,
+		addr:   ServerAddr,
 		Log:    log,
 		router: router.New(),
 		debug:  true,
@@ -76,13 +70,13 @@ func (ws *webServer) Close() {
 	_ = ws.ln.Close()
 }
 
-func (ws *webServer) Run() {
-	var ln net.Listener
-	var err error
-
+func (ws *webServer) Run() (err error) {
 	ws.muxRouter()
 	// reuse port
-	ln, err = listen(ws.addr, ws.Log)
+	ws.ln, err = listen(ws.addr, ws.Log)
+	if err != nil {
+		return err
+	}
 	var lg = zaplogger.InitZapLogger(ws.Log)
 	s := &fasthttp.Server{
 		Handler:            ws.router.Handler,
@@ -94,22 +88,16 @@ func (ws *webServer) Run() {
 		Concurrency:        ws.Config.Concurrency,
 		Logger:             lg,
 	}
-	// run fasthttp serv
 
+	// run fasthttp serv
 	var g run.Group
 	g.Add(func() error {
-
-		return s.Serve(ln)
+		return s.Serve(ws.ln)
 	}, func(e error) {
-		_ = ln.Close()
+		_ = ws.ln.Close()
 
 	})
-	err = g.Run()
-	if err != nil {
-		// TODO: handle error
-		panic("tcp connect error")
-	}
-
+	return g.Run()
 }
 
 func listen(addr string, log *zap.Logger) (ln net.Listener, err error) {

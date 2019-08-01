@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/tsingson/fasthttp-example/webserver"
 	"go.uber.org/zap"
+
+	"github.com/tsingson/fasthttp-example/webserver"
 )
 
 func main() {
@@ -13,11 +14,7 @@ func main() {
 	runtime.MemProfileRate = 0
 	runtime.GOMAXPROCS(128)
 
-	fmt.Println("----------------------------------------------------")
-	//
-	// current, _ := utils.GetCurrentPath()
-	//
-	// tls(current)
+	fmt.Println("----- fasthttp server starting -----")
 
 	var s = webserver.DefaultServer()
 

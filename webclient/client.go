@@ -30,6 +30,7 @@ type WebClient struct {
 	Debug          bool
 }
 
+// Default  setup a default fasthttp client
 func Default() *WebClient {
 	var log = zaplogger.ConsoleDebug()
 	return &WebClient{
@@ -43,7 +44,7 @@ func Default() *WebClient {
 	}
 }
 
-// FastPostByte
+// FastPostByte  do  POST request via fasthttp
 func (w *WebClient) FastPostByte(requestURI string, body []byte) (*fasthttp.Response, error) {
 	var log = w.log.Named("FastPostByte")
 	t1 := time.Now()
@@ -77,11 +78,12 @@ func (w *WebClient) FastPostByte(requestURI string, body []byte) (*fasthttp.Resp
 	if w.TimeOut != 0 {
 		timeOut = w.TimeOut
 	}
-	err := fasthttp.DoTimeout(req, resp, timeOut)
+	var err = fasthttp.DoTimeout(req, resp, timeOut)
 	if err != nil {
-		// fmt.Printf("%+v\n", err)
+		log.Error("post request error", zap.Error(err))
 		return nil, err
 	}
+	// list all response for debug
 	if w.Debug {
 		elapsed := time.Since(t1)
 		log.Debug(w.TransactionID, zap.Duration("elapsed", elapsed))
@@ -92,13 +94,14 @@ func (w *WebClient) FastPostByte(requestURI string, body []byte) (*fasthttp.Resp
 		log.Debug(w.TransactionID, zap.String("http payload", gotils.B2S(resp.Body())))
 	}
 
+	// just for demo
 	var out = fasthttp.AcquireResponse()
-
 	resp.CopyTo(out)
 
 	return out, nil
 }
 
+// FastGet do GET request via fasthttp
 func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 	var log = w.log.Named("FastGet")
 	t1 := time.Now()
@@ -106,7 +109,7 @@ func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
 	defer func() {
-		// fasthttp.ReleaseResponse(resp)
+		fasthttp.ReleaseResponse(resp)
 		fasthttp.ReleaseRequest(req)
 	}()
 	req.SetRequestURI(requestURI)
@@ -118,9 +121,10 @@ func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 		req.Header.Set("Authorization", "Bearer "+w.JwtToken)
 	}
 
+	// define web client request Method
 	req.Header.SetMethod("GET")
 
-	// fmt.Println("---------- req --------------")
+
 	if w.Debug {
 		req.Header.VisitAll(func(key, value []byte) {
 			log.Debug(w.TransactionID, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
@@ -132,9 +136,11 @@ func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 	if w.TimeOut != 0 {
 		timeOut = w.TimeOut
 	}
-	err := fasthttp.DoTimeout(req, resp, timeOut)
+	// DO GET request
+	var err = fasthttp.DoTimeout(req, resp, timeOut)
+
 	if err != nil {
-		// fmt.Printf("%+v\n", err)
+		log.Error("post request error", zap.Error(err))
 		return nil, err
 	}
 	if w.Debug {
@@ -147,8 +153,9 @@ func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 		log.Debug(w.TransactionID, zap.String("http payload", gotils.B2S(resp.Body())))
 	}
 
-	var out = fasthttp.AcquireResponse()
+	// add your logic code here
 
+	var out = fasthttp.AcquireResponse()
 	resp.CopyTo(out)
 
 	return out, nil

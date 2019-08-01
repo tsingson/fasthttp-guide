@@ -10,8 +10,15 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-# Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
+# Project-local glide xcache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 
 # iginore  jetbrains goland/idea setting path
 .idea/
+
+# Project exclude paths
+/deployment/config-20180615/
+/deployment/home/
+/deployment/temp/
+/test/
+/test-data/test/
