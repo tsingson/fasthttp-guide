@@ -124,7 +124,6 @@ func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 	// define web client request Method
 	req.Header.SetMethod("GET")
 
-
 	if w.Debug {
 		req.Header.VisitAll(func(key, value []byte) {
 			log.Debug(w.TransactionID, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))

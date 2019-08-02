@@ -2,13 +2,13 @@ package webserver
 
 import (
 	"net"
+	"sync"
 
 	"github.com/fasthttp/router"
 	"github.com/oklog/run"
 	"github.com/tsingson/fastx/utils"
 	"github.com/tsingson/zaplogger"
 	"github.com/valyala/fasthttp"
-	"github.com/valyala/fasthttp/reuseport"
 	"go.uber.org/zap"
 )
 
@@ -20,99 +20,94 @@ const (
 	ContentJson = "application/json; charset=utf-8"
 )
 
+var once sync.Once
+
 type webServer struct {
-	Config WebConfig
+	Cfg    WebConfig
 	addr   string
 	Log    *zap.Logger
-	ln     net.Listener
+	ln     []net.Listener
 	router *router.Router
 	debug  bool
 }
 
 // NewServer  new fasthttp webServer
-func NewServer(cfg WebConfig) *webServer {
+func NewServer(cfg WebConfig) (s *webServer) {
+	once.Do(func() {
+		var path, _ = utils.GetCurrentExecDir()
 
-	var path, err = utils.GetCurrentExecDir()
-	if err != nil {
+		logPath := path + "/Log"
+		var log = zaplogger.NewZapLog(logPath, "vkmsa", true)
 
-	}
-
-	logPath := path + "/Log"
-	log := zaplogger.NewZapLog(logPath, "vkmsa", true)
-
-	s := &webServer{
-		Config: cfg,
-		addr:   ":8091",
-		Log:    log,
-		router: router.New(),
-		debug:  true,
-	}
+		s = &webServer{
+			Cfg:    cfg,
+			addr:   ":8091",
+			Log:    log,
+			router: router.New(),
+			debug:  true,
+		}
+	})
 	return s
 }
 
 // NewServer  new fasthttp webServer
-func DefaultServer() *webServer {
-	var log = zaplogger.ConsoleDebug()
-
-	var cfg = Default()
-
-	s := &webServer{
-		Config: cfg,
-		addr:   ServerAddr,
-		Log:    log,
-		router: router.New(),
-		debug:  true,
-	}
+func DefaultServer() (s *webServer) {
+	once.Do(func() {
+		var log = zaplogger.ConsoleDebug()
+		var cfg = Default()
+		s = &webServer{
+			Cfg:    cfg,
+			addr:   ServerAddr,
+			Log:    log,
+			router: router.New(),
+			debug:  true,
+		}
+	})
 	return s
 }
 
 func (ws *webServer) Close() {
-	_ = ws.ln.Close()
+	for _, v := range ws.ln {
+		_ = v.Close()
+	}
 }
 
 func (ws *webServer) Run() (err error) {
 	ws.muxRouter()
 	// reuse port
-	ws.ln, err = listen(ws.addr, ws.Log)
+
+	// for i:=0; i< runtime.NumCPU(); i++ {
+	var ln net.Listener
+	// var err error
+	ln, err = ws.getListener()
 	if err != nil {
 		return err
 	}
+	ws.ln = append(ws.ln, ln)
+	// }
+
 	var lg = zaplogger.InitZapLogger(ws.Log)
 	s := &fasthttp.Server{
 		Handler:            ws.router.Handler,
-		Name:               ws.Config.Name,
-		ReadBufferSize:     ws.Config.ReadBufferSize,
-		MaxConnsPerIP:      ws.Config.MaxConnsPerIP,
-		MaxRequestsPerConn: ws.Config.MaxRequestsPerConn,
-		MaxRequestBodySize: ws.Config.MaxRequestBodySize, //  100 << 20, // 100MB // 1024 * 4, // MaxRequestBodySize:
-		Concurrency:        ws.Config.Concurrency,
+		Name:               ws.Cfg.Name,
+		ReadBufferSize:     ws.Cfg.ReadBufferSize,
+		MaxConnsPerIP:      ws.Cfg.MaxConnsPerIP,
+		MaxRequestsPerConn: ws.Cfg.MaxRequestsPerConn,
+		MaxRequestBodySize: ws.Cfg.MaxRequestBodySize, //  100 << 20, // 100MB // 1024 * 4, // MaxRequestBodySize:
+		Concurrency:        ws.Cfg.Concurrency,
 		Logger:             lg,
 	}
 
 	// run fasthttp serv
 	var g run.Group
-	g.Add(func() error {
-		return s.Serve(ws.ln)
-	}, func(e error) {
-		_ = ws.ln.Close()
-
-	})
-	return g.Run()
-}
-
-func listen(addr string, log *zap.Logger) (ln net.Listener, err error) {
-
-	ln, err = reuseport.Listen("tcp4", addr)
-	if err != nil {
-		log.Info("working in windows" + addr)
-		// for windows
-		ln, err = net.Listen("tcp", addr)
-		if err != nil {
-			log.Fatal("tcp Connect Error", zap.Error(err))
-			return nil, err
-		}
+	for _, v := range ws.ln {
+		g.Add(func() error {
+			return s.Serve(v)
+		}, func(e error) {
+			_ = v.Close()
+		})
 	}
-	return ln, nil
+	return g.Run()
 }
 
 // design and code by tsingson
