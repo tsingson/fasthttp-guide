@@ -52,7 +52,9 @@ func NewServer(cfg WebConfig) *webServer {
 
 // NewServer  new fasthttp webServer
 func DefaultServer() *webServer {
-	var log = zaplogger.ConsoleDebug()
+	core := zaplogger.NewConsoleDebug()
+	// From a zapcore.Core, it's easy to construct a Logger.
+	log := zap.New(core)
 
 	var cfg = Default()
 

@@ -12,7 +12,7 @@ func main() {
 	var w = webclient.Default()
 	w.Debug = true
 
-	w.Authentication = true
+	w.Authentication = false
 	w.JwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTY2NzIwMDAsInJvbGUiOiJ0ZXJtaW5hbF9hcGsiLCJzdGF0dXMiOiJhY3RpdmUiLCJ1c2VyX2lkIjoiNTBjNjg5MTAtNjEyYi00NjMzLTk2YjktNTA3NzhjNDViNTAwIn0.l1JHnOL85s3ajto0MKs-D6paW1YxpaMuxA0nzI0Xlfk"
 	var url = "http://localhost:3001/get"
 	var resp, err = w.FastGet(url)

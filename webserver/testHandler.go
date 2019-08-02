@@ -1,8 +1,6 @@
 package webserver
 
 import (
-	"strconv"
-
 	"github.com/savsgio/gotils"
 	"github.com/valyala/fasthttp"
 	"go.uber.org/zap"
@@ -10,7 +8,8 @@ import (
 
 func (ws *webServer) testGet() func(ctx *fasthttp.RequestCtx) {
 	return func(ctx *fasthttp.RequestCtx) {
-		var tid = strconv.FormatInt(int64(ctx.ID()), 10)
+		// var tid = strconv.FormatInt(int64(ctx.ID()), 10)
+		var tid = gotils.B2S(ctx.Request.Header.Peek("TransactionID"))
 		l := ws.Log.Named(tid)
 		l.Debug("testGet")
 
@@ -35,7 +34,8 @@ func (ws *webServer) testGet() func(ctx *fasthttp.RequestCtx) {
 
 func (ws *webServer) testPost() func(ctx *fasthttp.RequestCtx) {
 	return func(ctx *fasthttp.RequestCtx) {
-		var tid = strconv.FormatInt(int64(ctx.ID()), 10)
+		// var tid = strconv.FormatInt(int64(ctx.ID()), 10)
+		var tid = gotils.B2S(ctx.Request.Header.Peek("TransactionID"))
 		l := ws.Log.Named(tid)
 		l.Debug("testPost")
 

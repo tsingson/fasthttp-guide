@@ -32,7 +32,11 @@ type WebClient struct {
 
 // Default  setup a default fasthttp client
 func Default() *WebClient {
-	var log = zaplogger.ConsoleDebug()
+
+	core := zaplogger.NewConsoleDebug()
+	// From a zapcore.Core, it's easy to construct a Logger.
+	log := zap.New(core)
+
 	return &WebClient{
 		Authentication: false,
 		TransactionID:  time.Now().String(),
@@ -48,7 +52,7 @@ func Default() *WebClient {
 func (w *WebClient) FastPostByte(requestURI string, body []byte) (*fasthttp.Response, error) {
 	var log = w.log.Named("FastPostByte")
 	t1 := time.Now()
-	w.TransactionID = t1.String()
+	w.TransactionID = "124"
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
 	defer func() {
@@ -105,7 +109,7 @@ func (w *WebClient) FastPostByte(requestURI string, body []byte) (*fasthttp.Resp
 func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 	var log = w.log.Named("FastGet")
 	t1 := time.Now()
-	w.TransactionID = t1.String()
+	w.TransactionID = "123"
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
 	defer func() {
@@ -123,7 +127,6 @@ func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 
 	// define web client request Method
 	req.Header.SetMethod("GET")
-
 
 	if w.Debug {
 		req.Header.VisitAll(func(key, value []byte) {
