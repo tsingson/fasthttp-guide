@@ -80,6 +80,7 @@ func main() {
 	req.Header.SetBytesKV([]byte("Content-Type"), []byte("text/plain; charset=utf8"))
 	req.Header.SetBytesKV([]byte("User-Agent"), []byte("fasthttp-example web client"))
 	req.Header.SetBytesKV([]byte("Accept"), []byte("text/plain; charset=utf8"))
+	req.Header.SetBytesKV([]byte("TransactionID"), []byte(tid))
 
 	// 设置 web client 请求的超时时间
 	var timeOut = 3 * time.Second
