@@ -10,20 +10,19 @@ import (
 )
 
 func main() {
-
 	runtime.MemProfileRate = 0
 	runtime.GOMAXPROCS(128)
 
 	fmt.Println("----- fasthttp server starting -----")
 
-	var s = webserver.DefaultServer()
+	s := webserver.DefaultServer()
 
 	stopSignal := make(chan struct{})
 
 	undo := zap.RedirectStdLog(s.Log)
 	defer undo()
 
-	var err = s.Run()
+	err := s.Run()
 	if err != nil {
 		panic("server start fail")
 	}

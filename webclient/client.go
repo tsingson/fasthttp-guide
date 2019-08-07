@@ -32,7 +32,6 @@ type WebClient struct {
 
 // Default  setup a default fasthttp client
 func Default() *WebClient {
-
 	core := zaplogger.NewConsoleDebug()
 	// From a zapcore.Core, it's easy to construct a Logger.
 	log := zap.New(core)
@@ -50,7 +49,7 @@ func Default() *WebClient {
 
 // FastPostByte  do  POST request via fasthttp
 func (w *WebClient) FastPostByte(requestURI string, body []byte) (*fasthttp.Response, error) {
-	var log = w.log.Named("FastPostByte")
+	log := w.log.Named("FastPostByte")
 	t1 := time.Now()
 	w.TransactionID = "124"
 	req := fasthttp.AcquireRequest()
@@ -78,11 +77,11 @@ func (w *WebClient) FastPostByte(requestURI string, body []byte) (*fasthttp.Resp
 		log.Debug(w.TransactionID)
 	}
 
-	var timeOut = 3 * time.Second
+	timeOut := 3 * time.Second
 	if w.TimeOut != 0 {
 		timeOut = w.TimeOut
 	}
-	var err = fasthttp.DoTimeout(req, resp, timeOut)
+	err := fasthttp.DoTimeout(req, resp, timeOut)
 	if err != nil {
 		log.Error("post request error", zap.Error(err))
 		return nil, err
@@ -99,7 +98,7 @@ func (w *WebClient) FastPostByte(requestURI string, body []byte) (*fasthttp.Resp
 	}
 
 	// just for demo
-	var out = fasthttp.AcquireResponse()
+	out := fasthttp.AcquireResponse()
 	resp.CopyTo(out)
 
 	return out, nil
@@ -107,7 +106,7 @@ func (w *WebClient) FastPostByte(requestURI string, body []byte) (*fasthttp.Resp
 
 // FastGet do GET request via fasthttp
 func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
-	var log = w.log.Named("FastGet")
+	log := w.log.Named("FastGet")
 	t1 := time.Now()
 	w.TransactionID = "123"
 	req := fasthttp.AcquireRequest()
@@ -135,13 +134,12 @@ func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 		log.Debug(w.TransactionID)
 	}
 
-	var timeOut = 3 * time.Second
+	timeOut := 3 * time.Second
 	if w.TimeOut != 0 {
 		timeOut = w.TimeOut
 	}
 	// DO GET request
-	var err = fasthttp.DoTimeout(req, resp, timeOut)
-
+	err := fasthttp.DoTimeout(req, resp, timeOut)
 	if err != nil {
 		log.Error("post request error", zap.Error(err))
 		return nil, err
@@ -158,7 +156,7 @@ func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 
 	// add your logic code here
 
-	var out = fasthttp.AcquireResponse()
+	out := fasthttp.AcquireResponse()
 	resp.CopyTo(out)
 
 	return out, nil

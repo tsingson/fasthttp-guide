@@ -11,31 +11,33 @@ import (
 	"github.com/tsingson/fasthttp-example/logger"
 )
 
-func main() {
+/**
+121.211.149.176 - - [04/Aug/2019:23:59:01 +0800] "GET /epg?date=eq.2019-08-05&channel_id=eq.20024 HTTP/1.1" 200 2249 "-" "okhttp/3.5.0" "-" "0.060" "0.061" "-" request_body&&&&&-
+*/
 
+func main() {
 	var log *zap.Logger = logger.Console()
-	var address = "127.0.0.1:3001"
+	address := "127.0.0.1:3001"
 
 	// -------------------------------------------------------
 	//  fasthttp 的 handler 处理函数
 	// -------------------------------------------------------
-	var requestHandler = func(ctx *fasthttp.RequestCtx) {
-
+	requestHandler := func(ctx *fasthttp.RequestCtx) {
 		// -------------------------------------------------------
 		// 处理 web client 的请求数据
 		// -------------------------------------------------------
 		// 取出 web client 请求进行 TCP 连接的连接 ID
-		var connID = strconv.FormatUint(ctx.ConnID(), 10)
+		connID := strconv.FormatUint(ctx.ConnID(), 10)
 		// 取出 web client 请求 HTTP header 中的事务ID
-		 var tid = string( ctx.Request.Header.PeekBytes([]byte("TransactionID")))
-		 if len(tid) == 0 {
-		 	tid = "12345678"
-		 }
+		tid := string(ctx.Request.Header.PeekBytes([]byte("TransactionID")))
+		if len(tid) == 0 {
+			tid = "12345678"
+		}
 
 		log.Debug("HTTP 访问 TCP 连接 ID  " + connID)
 
 		// 取出 web 访问的 URL/URI
-		var uriPath = ctx.Path()
+		uriPath := ctx.Path()
 		{
 			// 取出 URI
 			log.Debug("---------------- HTTP URI -------------")
@@ -45,7 +47,7 @@ func main() {
 		// 取出 web client 请求的 URL/URI 中的参数部分
 		{
 			log.Debug("---------------- HTTP URI 参数 -------------")
-			var uri = ctx.URI().QueryString()
+			uri := ctx.URI().QueryString()
 			log.Debug("在 URI 中的原始数据 > " + string(uri))
 			log.Debug("---------------- HTTP URI 每一个键值对 -------------")
 			ctx.URI().QueryArgs().VisitAll(func(key, value []byte) {
@@ -63,11 +65,10 @@ func main() {
 					// l.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
 					log.Debug(tid, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
 				})
-
 			}
 			// 取出 web client 请求中的 HTTP payload
 			{
-				log.Debug("---------------- HTTP payload -------------")
+				log.Debug("---------------- request HTTP payload -------------")
 				log.Debug(tid, zap.String("http payload", gotils.B2S(ctx.Request.Body())))
 			}
 		}
@@ -82,10 +83,10 @@ func main() {
 				// -------------------------------------------------------
 
 				// payload 是 []byte , 是 web response 返回的 HTTP payload
-				var payload = bytes.NewBuffer([]byte("Hello, "))
+				payload := bytes.NewBuffer([]byte("Hello, "))
 
 				// 这是从 web client 取数据
-				var who = ctx.QueryArgs().PeekBytes([]byte("who"))
+				who := ctx.QueryArgs().PeekBytes([]byte("who"))
 
 				if len(who) > 0 {
 					payload.Write(who)
@@ -103,6 +104,7 @@ func main() {
 				ctx.Response.Header.SetBytesKV([]byte("TransactionID"), []byte(tid))
 				// HTTP payload 设置
 				// 这里 HTTP payload 是 []byte
+				log.Debug(tid, zap.String("payload", payload.String()))
 				ctx.Response.SetBody(payload.Bytes())
 			}
 
@@ -116,10 +118,10 @@ func main() {
 				// -------------------------------------------------------
 
 				// payload 是 []byte , 是 web response 返回的 HTTP payload
-				var payload = bytes.NewBuffer([]byte("Hello, "))
+				payload := bytes.NewBuffer([]byte("Hello, "))
 
 				// 这是从 web client 取数据
-				var who = ctx.QueryArgs().PeekBytes([]byte("who"))
+				who := ctx.QueryArgs().PeekBytes([]byte("who"))
 
 				if len(who) > 0 {
 					payload.Write(who)
@@ -137,20 +139,20 @@ func main() {
 				ctx.Response.Header.SetBytesKV([]byte("TransactionID"), []byte(tid))
 				// HTTP payload 设置
 				// 这里 HTTP payload 是 []byte
+				log.Debug(tid, zap.String("payload", payload.String()))
 				ctx.Response.SetBody(payload.Bytes())
 			}
 		}
 
 		return
-
 	}
 	// -------------------------------------------------------
 	// 创建 fasthttp 服务器
 	// -------------------------------------------------------
 	// Create custom server.
 	s := &fasthttp.Server{
-		Handler: requestHandler,       // 注意这里
-		Name:    "hello-world server", // 服务器名称
+		Handler: requestHandler,     // 注意这里
+		Name:    "hello-cmd server", // 服务器名称
 	}
 	// -------------------------------------------------------
 	// 运行服务端程序

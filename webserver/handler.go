@@ -10,17 +10,17 @@ import (
 
 func (ws *webServer) hello() func(ctx *fasthttp.RequestCtx) {
 	return func(ctx *fasthttp.RequestCtx) {
-		var tid = strconv.FormatInt(int64(ctx.ID()), 10)
-		l := ws.Log.Named(tid)
-		l.Debug("hello")
+		tid := strconv.FormatInt(int64(ctx.ID()), 10)
+		log := ws.Log.Named(tid)
+		log.Debug("hello")
 
 		if ws.debug {
 			ctx.Request.Header.VisitAll(func(key, value []byte) {
-				// l.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
-				l.Debug(tid, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+				// log.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+				log.Debug(tid, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
 			})
 
-			l.Debug(tid, zap.String("http payload", gotils.B2S(ctx.Request.Body())))
+			log.Debug(tid, zap.String("http payload", gotils.B2S(ctx.Request.Body())))
 
 		}
 
@@ -29,5 +29,4 @@ func (ws *webServer) hello() func(ctx *fasthttp.RequestCtx) {
 		ctx.SetBody([]byte(`hello world`))
 		return
 	}
-
 }

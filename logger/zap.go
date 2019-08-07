@@ -27,8 +27,8 @@ func NewConsoleDebug() zapcore.Core {
 	// Join the outputs, encoders, and level-handling functions into
 	// zapcore.Cores, then tee the four cores together.
 
-	var stderr = zapcore.NewCore(consoleEncoder, consoleErrors, highPriority)
-	var stdout = zapcore.NewCore(consoleEncoder, consoleDebugging, lowPriority)
+	stderr := zapcore.NewCore(consoleEncoder, consoleErrors, highPriority)
+	stdout := zapcore.NewCore(consoleEncoder, consoleDebugging, lowPriority)
 
 	return zapcore.NewTee(stderr, stdout)
 }

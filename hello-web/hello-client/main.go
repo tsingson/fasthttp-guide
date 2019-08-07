@@ -13,12 +13,11 @@ import (
 )
 
 func main() {
-
 	var log *zap.Logger = logger.Console()
-	var baseURL = "http://127.0.0.1:3001"
+	baseURL := "http://127.0.0.1:3001"
 
 	// 随便指定一个字串做为 web 请求的事务ID , 用来打印多条日志时, 区分是否来自同一个 web 请求事务
-	var tid = "12345678"
+	tid := "12345678"
 
 	// -------------------------------------------------------
 	//      构造 web client 请求的 URL
@@ -60,8 +59,8 @@ func main() {
 	//      fasthttp web client 的初始化, 与清理
 	// -------------------------------------------------------
 	//  fasthttp 从缓存池中申请 request / response 对象
-	var req = fasthttp.AcquireRequest()
-	var resp = fasthttp.AcquireResponse()
+	req := fasthttp.AcquireRequest()
+	resp := fasthttp.AcquireResponse()
 	// 释放申请的对象到池中
 	defer func() {
 		fasthttp.ReleaseResponse(resp)
@@ -83,14 +82,13 @@ func main() {
 	req.Header.SetBytesKV([]byte("TransactionID"), []byte(tid))
 
 	// 设置 web client 请求的超时时间
-	var timeOut = 3 * time.Second
+	timeOut := 3 * time.Second
 
 	// 计时开始
 	t1 := time.Now()
 
 	// DO request
-	var err = fasthttp.DoTimeout(req, resp, timeOut)
-
+	err := fasthttp.DoTimeout(req, resp, timeOut)
 	if err != nil {
 		log.Error("post request error", zap.Error(err))
 		os.Exit(-1)
@@ -126,5 +124,4 @@ func main() {
 			log.Debug(tid, zap.String("http payload", gotils.B2S(resp.Body())))
 		}
 	}
-
 }

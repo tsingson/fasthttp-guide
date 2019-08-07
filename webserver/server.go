@@ -8,7 +8,6 @@ import (
 	"github.com/tsingson/fastx/utils"
 	"github.com/tsingson/zaplogger"
 	"github.com/valyala/fasthttp"
-	"github.com/valyala/fasthttp/reuseport"
 	"go.uber.org/zap"
 )
 
@@ -31,10 +30,8 @@ type webServer struct {
 
 // NewServer  new fasthttp webServer
 func NewServer(cfg WebConfig) *webServer {
-
-	var path, err = utils.GetCurrentExecDir()
+	path, err := utils.GetCurrentExecDir()
 	if err != nil {
-
 	}
 
 	logPath := path + "/Log"
@@ -56,7 +53,7 @@ func DefaultServer() *webServer {
 	// From a zapcore.Core, it's easy to construct a Logger.
 	log := zap.New(core)
 
-	var cfg = Default()
+	cfg := Default()
 
 	s := &webServer{
 		Config: cfg,
@@ -79,7 +76,7 @@ func (ws *webServer) Run() (err error) {
 	if err != nil {
 		return err
 	}
-	var lg = zaplogger.InitZapLogger(ws.Log)
+	lg := zaplogger.InitZapLogger(ws.Log)
 	s := &fasthttp.Server{
 		Handler:            ws.router.Handler,
 		Name:               ws.Config.Name,
@@ -97,24 +94,8 @@ func (ws *webServer) Run() (err error) {
 		return s.Serve(ws.ln)
 	}, func(e error) {
 		_ = ws.ln.Close()
-
 	})
 	return g.Run()
-}
-
-func listen(addr string, log *zap.Logger) (ln net.Listener, err error) {
-
-	ln, err = reuseport.Listen("tcp4", addr)
-	if err != nil {
-		log.Info("working in windows" + addr)
-		// for windows
-		ln, err = net.Listen("tcp", addr)
-		if err != nil {
-			log.Fatal("tcp Connect Error", zap.Error(err))
-			return nil, err
-		}
-	}
-	return ln, nil
 }
 
 // design and code by tsingson
