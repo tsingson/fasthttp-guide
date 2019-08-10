@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"strconv"
 
 	"github.com/savsgio/gotils"
@@ -41,7 +42,7 @@ func main() {
 		{
 			// 取出 URI
 			log.Debug("---------------- HTTP URI -------------")
-			log.Debug(" HTTP 请求 URL 原始数据 > ", zap.String("request", ctx.String()))
+			log.Debug(" HTTP 请求 URL 原始数据 > ", zap.String("request", fmt.Sprintf("#%016X - %s<->%s - %s %s", ctx.ID(), ctx.LocalAddr(), ctx.RemoteAddr(), ctx.Request.Header.Method(), ctx.URI().FullURI())))
 		}
 
 		// 取出 web client 请求的 URL/URI 中的参数部分
