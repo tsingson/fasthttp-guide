@@ -12,6 +12,5 @@ require (
 	github.com/tsingson/zaplogger v0.3.2
 	github.com/valyala/fasthttp v1.4.0
 	go.uber.org/zap v1.10.0
-	golang.org/x/net v0.0.0-20190620200207-3b0461eec859 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
