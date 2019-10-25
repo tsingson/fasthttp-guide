@@ -14,8 +14,8 @@ func main() {
 	runtime.GOMAXPROCS(128)
 
 	fmt.Println("----- fasthttp server starting -----")
-
-	s := webserver.DefaultServer()
+	cfg := webserver.Default()
+	s := webserver.NewServer(cfg)
 
 	stopSignal := make(chan struct{})
 

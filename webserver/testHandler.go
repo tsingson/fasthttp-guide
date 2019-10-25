@@ -1,15 +1,16 @@
 package webserver
 
 import (
-	"github.com/savsgio/gotils"
 	"github.com/valyala/fasthttp"
 	"go.uber.org/zap"
+
+	"github.com/tsingson/fasthttp-example/pkg/goutils"
 )
 
 func (ws *webServer) testGet() func(ctx *fasthttp.RequestCtx) {
 	return func(ctx *fasthttp.RequestCtx) {
 		// var tid = strconv.FormatInt(int64(ctx.ID()), 10)
-		tid := gotils.B2S(ctx.Request.Header.Peek("TransactionID"))
+		tid := goutils.B2S(ctx.Request.Header.Peek("TransactionID"))
 		l := ws.Log.Named(tid)
 		l.Debug("testGet")
 
@@ -17,10 +18,10 @@ func (ws *webServer) testGet() func(ctx *fasthttp.RequestCtx) {
 			l.Debug(tid, zap.String("request", ctx.String()))
 			ctx.Request.Header.VisitAll(func(key, value []byte) {
 				// l.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
-				l.Debug(tid, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+				l.Debug(tid, zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
 			})
 
-			l.Debug(tid, zap.String("http payload", gotils.B2S(ctx.Request.Body())))
+			l.Debug(tid, zap.String("http payload", goutils.B2S(ctx.Request.Body())))
 
 		}
 
@@ -34,16 +35,16 @@ func (ws *webServer) testGet() func(ctx *fasthttp.RequestCtx) {
 func (ws *webServer) testPost() func(ctx *fasthttp.RequestCtx) {
 	return func(ctx *fasthttp.RequestCtx) {
 		// var tid = strconv.FormatInt(int64(ctx.ID()), 10)
-		tid := gotils.B2S(ctx.Request.Header.Peek("TransactionID"))
+		tid := goutils.B2S(ctx.Request.Header.Peek("TransactionID"))
 		l := ws.Log.Named(tid)
 		l.Debug("testPost")
 
 		if ws.debug {
 			l.Debug(tid, zap.String("request", ctx.String()))
 			ctx.Request.Header.VisitAll(func(key, value []byte) {
-				l.Debug(tid, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+				l.Debug(tid, zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
 			})
-			l.Debug(tid, zap.String("http payload", gotils.B2S(ctx.Request.Body())))
+			l.Debug(tid, zap.String("http payload", goutils.B2S(ctx.Request.Body())))
 		}
 
 		ctx.SetContentType(ContentRest)

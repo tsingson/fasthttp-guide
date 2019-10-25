@@ -4,7 +4,9 @@ import (
 	"time"
 
 	"github.com/savsgio/gotils"
-	"github.com/tsingson/zaplogger"
+
+	"github.com/tsingson/fasthttp-example/logger"
+
 	"github.com/valyala/fasthttp"
 	"go.uber.org/zap"
 )
@@ -32,9 +34,8 @@ type WebClient struct {
 
 // Default  setup a default fasthttp client
 func Default() *WebClient {
-	core := zaplogger.NewConsoleDebug()
 	// From a zapcore.Core, it's easy to construct a Logger.
-	log := zap.New(core)
+	log := logger.Console()
 
 	return &WebClient{
 		Authentication: false,

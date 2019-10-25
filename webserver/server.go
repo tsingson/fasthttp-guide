@@ -5,10 +5,12 @@ import (
 
 	"github.com/fasthttp/router"
 	"github.com/oklog/run"
-	"github.com/tsingson/fastx/utils"
-	"github.com/tsingson/zaplogger"
+	"github.com/valyala/fasthttp/reuseport"
+
 	"github.com/valyala/fasthttp"
 	"go.uber.org/zap"
+
+	"github.com/tsingson/fasthttp-example/logger"
 )
 
 const (
@@ -21,7 +23,7 @@ const (
 
 type webServer struct {
 	Config WebConfig
-	addr   string
+	Addr   string
 	Log    *zap.Logger
 	ln     net.Listener
 	router *router.Router
@@ -30,34 +32,11 @@ type webServer struct {
 
 // NewServer  new fasthttp webServer
 func NewServer(cfg WebConfig) *webServer {
-	path, err := utils.GetCurrentExecDir()
-	if err != nil {
-	}
-
-	logPath := path + "/Log"
-	log := zaplogger.NewZapLog(logPath, "vkmsa", true)
+	log := logger.Console()
 
 	s := &webServer{
 		Config: cfg,
-		addr:   ":8091",
-		Log:    log,
-		router: router.New(),
-		debug:  true,
-	}
-	return s
-}
-
-// NewServer  new fasthttp webServer
-func DefaultServer() *webServer {
-	core := zaplogger.NewConsoleDebug()
-	// From a zapcore.Core, it's easy to construct a Logger.
-	log := zap.New(core)
-
-	cfg := Default()
-
-	s := &webServer{
-		Config: cfg,
-		addr:   ServerAddr,
+		Addr:   ServerAddr,
 		Log:    log,
 		router: router.New(),
 		debug:  true,
@@ -72,11 +51,12 @@ func (ws *webServer) Close() {
 func (ws *webServer) Run() (err error) {
 	ws.muxRouter()
 	// reuse port
-	ws.ln, err = listen(ws.addr, ws.Log)
+
+	ws.ln, err = reuseport.Listen("tcp4", ws.Addr)
 	if err != nil {
 		return err
 	}
-	lg := zaplogger.InitZapLogger(ws.Log)
+	lg := logger.InitZapLogger(ws.Log)
 	s := &fasthttp.Server{
 		Handler:            ws.router.Handler,
 		Name:               ws.Config.Name,

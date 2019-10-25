@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/savsgio/gotils"
 	"github.com/valyala/fasthttp"
 	"go.uber.org/zap"
 
 	"github.com/tsingson/fasthttp-example/logger"
+	"github.com/tsingson/fasthttp-example/pkg/goutils"
 )
 
 /**
@@ -52,7 +52,7 @@ func main() {
 			log.Debug("在 URI 中的原始数据 > " + string(uri))
 			log.Debug("---------------- HTTP URI 每一个键值对 -------------")
 			ctx.URI().QueryArgs().VisitAll(func(key, value []byte) {
-				log.Debug(tid, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+				log.Debug(tid, zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
 			})
 		}
 		// -------------------------------------------------------
@@ -63,14 +63,14 @@ func main() {
 			{
 				log.Debug("---------------- HTTP header 每一个键值对-------------")
 				ctx.Request.Header.VisitAll(func(key, value []byte) {
-					// l.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
-					log.Debug(tid, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+					// l.Info("requestHeader", zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
+					log.Debug(tid, zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
 				})
 			}
 			// 取出 web client 请求中的 HTTP payload
 			{
 				log.Debug("---------------- request HTTP payload -------------")
-				log.Debug(tid, zap.String("http payload", gotils.B2S(ctx.Request.Body())))
+				log.Debug(tid, zap.String("http payload", goutils.B2S(ctx.Request.Body())))
 			}
 		}
 		switch {

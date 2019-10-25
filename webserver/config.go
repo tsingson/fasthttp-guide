@@ -6,7 +6,6 @@ import (
 
 // WebConfig configuration for fasthttp, copy from fasthttp
 type WebConfig struct {
-
 	// Server name for sending in response headers.
 	//
 	// Default server name is used if left blank.

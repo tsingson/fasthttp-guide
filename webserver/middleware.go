@@ -11,7 +11,9 @@ func (ws *webServer) Recovery(next func(ctx *fasthttp.RequestCtx)) func(ctx *fas
 				ctx.Error("recover", 500)
 			}
 		}()
-		// your middleware logic here
+		{
+			// your middleware logic here
+		}
 
 		// do next
 		next(ctx)

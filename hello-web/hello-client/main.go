@@ -10,6 +10,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/tsingson/fasthttp-example/logger"
+	"github.com/tsingson/fasthttp-example/pkg/goutils"
 )
 
 func main() {
@@ -114,7 +115,7 @@ func main() {
 			log.Debug("---------------- HTTP header 每一个键值对-------------")
 			resp.Header.VisitAll(func(key, value []byte) {
 				// l.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
-				log.Debug(tid, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+				log.Debug(tid, zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
 			})
 
 		}
