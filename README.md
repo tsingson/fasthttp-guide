@@ -345,8 +345,184 @@ client side
 2019-08-02T06:23:38.677+0800	DEBUG	4294967298	webserver/testHandler.go:53	4294967298	{"http payload": "{\"actual_start_date\":\"2019-07-29\",\"actual_end_date\":\"2019-07-29\",\"plan_start_date\":\"2019-07-29\",\"plan_end_date\":\"2019-02-12\",\"title\":\"养殖计划00002\",\"user_id\":2098735545843717147}"}
 ```
 
+## 4.  How to Unit Testing 
 
-## 4.  license
+### 4.1  simple handler testing ( fasthttp hadler as function)
+
+define handler as a function
+```
+func Hello() func(ctx *fasthttp.RequestCtx) {
+	return func(ctx *fasthttp.RequestCtx) {
+		tid := strconv.FormatInt(int64(ctx.ID()), 10)
+
+		ctx.Request.Header.Add("tid", tid)
+		ctx.SetContentType(ContentText)
+		ctx.SetStatusCode(200)
+		ctx.SetBody([]byte(`hello world`))
+		return
+	}
+}
+
+```
+
+
+the unit testing code here 
+```
+func TestHello(t *testing.T) {
+	
+	// setup fasthttp server 
+    addr := ":3000"
+    s := &fasthttp.Server{
+        Handler: Hello(),
+    }
+    // setup listener 
+    ln, _ := reuseport.Listen("tcp4", addr)
+
+    // remember to close listener 
+    defer func() {
+        _ = ln.Close()
+    }()
+    
+    // now running fasthttp server in a goroutine 
+
+    go func() {
+        _ = s.Serve(ln)
+    }()
+
+    // -------------------------------------------------------
+    // now, the real http client what you want
+	// -------------------------------------------------------
+
+    c := &fasthttp.HostClient{
+        Addr: "localhost:3000",
+    }
+
+    // http client Fetch the testing fasthttp server  via local proxy.
+    statusCode, body, err := c.Get(nil, "http://google.com/hello")
+    assert.NoError(t, err)
+    assert.Equal(t, statusCode, 200)
+    assert.Equal(t, body, []byte(`hello world`))
+}
+
+```
+
+### 4.2  simple handler testing ( fasthttp hadler as method )
+
+juse like **4.1** but in method mode
+```
+func (ws *webServer) hello() func(ctx *fasthttp.RequestCtx) {
+	return func(ctx *fasthttp.RequestCtx) {
+		tid := strconv.FormatInt(int64(ctx.ID()), 10)
+		log := ws.Log.Named(tid)
+		log.Debug("hello")
+
+		if ws.debug {
+			ctx.Request.Header.VisitAll(func(key, value []byte) {
+				// log.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+				log.Debug(tid, zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
+			})
+
+			log.Debug(tid, zap.String("http payload", goutils.B2S(ctx.Request.Body())))
+
+		}
+
+		ctx.SetContentType(ContentText)
+		ctx.SetStatusCode(200)
+		ctx.SetBody([]byte(`hello world`))
+		return
+	}
+}
+```
+
+and 
+
+unit testing 
+
+```
+
+func TestWebServer_hello(t *testing.T) {
+
+    // setup logger that output to console
+    log := logger.Console()
+    ws := &webServer{
+        Addr:  ":3000",
+        Log:   log,
+        debug: true,
+    }
+    // setup fasthttp logger
+
+    flog := logger.InitZapLogger(ws.Log)
+
+    // setup fasthttp server
+
+    s := &fasthttp.Server{
+        Handler: ws.hello(),
+        Logger:  flog,
+    }
+
+    // setup listener
+    ln, _ := reuseport.Listen("tcp4", ws.Addr)
+
+    // remember to close listener
+    defer func() {
+        _ = ln.Close()
+    }()
+
+    // now running fasthttp server in a goroutine
+
+    go func() {
+        _ = s.Serve(ln)
+    }()
+
+    // -------------------------------------------------------
+    // now, the real http client what you want
+    // -------------------------------------------------------
+
+    c := &fasthttp.HostClient{
+        Addr: "localhost:3000",
+    }
+
+    // http client Fetch the testing fasthttp server  via local proxy.
+    statusCode, body, err := c.Get(nil, "http://google.com/hello")
+    assert.NoError(t, err)
+    assert.Equal(t, statusCode, 200)
+    assert.Equal(t, body, []byte(`hello world`))
+}
+
+
+```
+
+
+
+### 4.3 run test
+
+```
+/go/src/github.com/tsingson/fasthttp-example/webserver   go test -v .
+=== RUN   TestWebServer_hello
+2019-10-26T19:16:34.695+0800	DEBUG	4294967297	hello
+2019-10-26T19:16:34.695+0800	DEBUG	4294967297	4294967297	{"key": "Host", "value": "google.com"}
+2019-10-26T19:16:34.695+0800	DEBUG	4294967297	4294967297	{"key": "Content-Length", "value": "0"}
+2019-10-26T19:16:34.695+0800	DEBUG	4294967297	4294967297	{"key": "User-Agent", "value": "fasthttp"}
+2019-10-26T19:16:34.695+0800	DEBUG	4294967297	4294967297	{"http payload": ""}
+--- PASS: TestWebServer_hello (0.00s)
+=== RUN   TestHello
+--- PASS: TestHello (0.00s)
+PASS
+ok  	github.com/tsingson/fasthttp-example/webserver	0.015s
+
+```
+
+
+
+cool, just try it by yourself.
+
+
+
+
+
+
+## 5. license
+
 MIT
 
 by tsingson 2019
