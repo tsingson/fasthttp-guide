@@ -9,11 +9,11 @@ import (
 	"github.com/tsingson/fasthttp-example/pkg/goutils"
 )
 
-func (ws *webServer) hello() func(ctx *fasthttp.RequestCtx) {
+func (ws *webServer) helloWorldGetHandler() func(ctx *fasthttp.RequestCtx) {
 	return func(ctx *fasthttp.RequestCtx) {
 		tid := strconv.FormatInt(int64(ctx.ID()), 10)
 		log := ws.Log.Named(tid)
-		log.Debug("hello")
+		log.Debug("helloWorldGetHandler")
 
 		if ws.debug {
 			ctx.Request.Header.VisitAll(func(key, value []byte) {

@@ -7,12 +7,12 @@ import (
 	"github.com/tsingson/fasthttp-example/pkg/goutils"
 )
 
-func (ws *webServer) testGet() func(ctx *fasthttp.RequestCtx) {
+func (ws *webServer) simpleGetHandler() func(ctx *fasthttp.RequestCtx) {
 	return func(ctx *fasthttp.RequestCtx) {
 		// var tid = strconv.FormatInt(int64(ctx.ID()), 10)
 		tid := goutils.B2S(ctx.Request.Header.Peek("TransactionID"))
 		l := ws.Log.Named(tid)
-		l.Debug("testGet")
+		l.Debug("simpleGetHandler")
 
 		if ws.debug {
 			l.Debug(tid, zap.String("request", ctx.String()))
@@ -32,12 +32,12 @@ func (ws *webServer) testGet() func(ctx *fasthttp.RequestCtx) {
 	}
 }
 
-func (ws *webServer) testPost() func(ctx *fasthttp.RequestCtx) {
+func (ws *webServer) simplePostHandler() func(ctx *fasthttp.RequestCtx) {
 	return func(ctx *fasthttp.RequestCtx) {
 		// var tid = strconv.FormatInt(int64(ctx.ID()), 10)
 		tid := goutils.B2S(ctx.Request.Header.Peek("TransactionID"))
 		l := ws.Log.Named(tid)
-		l.Debug("testPost")
+		l.Debug("simplePostHandler")
 
 		if ws.debug {
 			l.Debug(tid, zap.String("request", ctx.String()))

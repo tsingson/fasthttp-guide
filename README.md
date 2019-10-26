@@ -5,7 +5,7 @@
 
 1. [GopherCon 2019 - How I write HTTP web services after eight years](https://about.sourcegraph.com/go/gophercon-2019-how-i-write-http-web-services-after-eight-years)
 
-1. [chinese guide ----> go语言Fasthttp实践系列(1) Hello World](https://juejin.im/post/5d446c15e51d4561fd6cb46f)
+1. [chinese guide ----> go语言Fasthttp实践系列(1) helloWorldGetHandler World](https://juejin.im/post/5d446c15e51d4561fd6cb46f)
 
 
 ## 1. fasthttp server side
@@ -64,9 +64,9 @@ what is **ws.Recovery**?
 
 ```
 func (ws *webServer) muxRouter() {
-	ws.router.GET("/", ws.Recovery(ws.hello()))
-	ws.router.GET("/get", ws.Recovery(ws.testGet()))
-	ws.router.POST("/post", ws.Recovery(ws.testPost()))
+	ws.router.GET("/", ws.Recovery(ws.helloWorldGetHandler()))
+	ws.router.GET("/get", ws.Recovery(ws.simpleGetHandler()))
+	ws.router.POST("/post", ws.Recovery(ws.simplePostHandler()))
 }
 
 ```
@@ -98,11 +98,11 @@ func (ws *webServer)   Recovery(next func(ctx *fasthttp.RequestCtx)) func(ctx *f
 
 a POST handler via fasthttp
 ```
-func (ws *webServer) testPost() func(ctx *fasthttp.RequestCtx) {
+func (ws *webServer) simplePostHandler() func(ctx *fasthttp.RequestCtx) {
 	return func(ctx *fasthttp.RequestCtx) {
 		var tid = strconv.FormatInt(int64(ctx.ID()), 10)
 		l := ws.Log.Named(tid)
-		l.Debug("testPost")
+		l.Debug("simplePostHandler")
 
 		if ws.debug {
 			l.Debug(tid, zap.String("request", ctx.String()))
@@ -324,7 +324,7 @@ client side
 **server side**
 ```
 ----- fasthttp server starting -----
-2019-08-02T06:23:38.675+0800	DEBUG	4294967297	webserver/testHandler.go:15	testGet
+2019-08-02T06:23:38.675+0800	DEBUG	4294967297	webserver/testHandler.go:15	simpleGetHandler
 2019-08-02T06:23:38.675+0800	DEBUG	4294967297	webserver/testHandler.go:19	4294967297	{"request": "#0000000100000001 - 127.0.0.1:3001<->127.0.0.1:64674 - GET http://localhost:3001/get"}
 2019-08-02T06:23:38.675+0800	DEBUG	4294967297	webserver/testHandler.go:22	4294967297	{"key": "Host", "value": "localhost:3001"}
 2019-08-02T06:23:38.675+0800	DEBUG	4294967297	webserver/testHandler.go:22	4294967297	{"key": "Content-Length", "value": "0"}
@@ -334,7 +334,7 @@ client side
 2019-08-02T06:23:38.675+0800	DEBUG	4294967297	webserver/testHandler.go:22	4294967297	{"key": "Accept", "value": "application/json"}
 2019-08-02T06:23:38.675+0800	DEBUG	4294967297	webserver/testHandler.go:22	4294967297	{"key": "Authorization", "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTY2NzIwMDAsInJvbGUiOiJ0ZXJtaW5hbF9hcGsiLCJzdGF0dXMiOiJhY3RpdmUiLCJ1c2VyX2lkIjoiNTBjNjg5MTAtNjEyYi00NjMzLTk2YjktNTA3NzhjNDViNTAwIn0.l1JHnOL85s3ajto0MKs-D6paW1YxpaMuxA0nzI0Xlfk"}
 2019-08-02T06:23:38.676+0800	DEBUG	4294967297	webserver/testHandler.go:25	4294967297	{"http payload": ""}
-2019-08-02T06:23:38.677+0800	DEBUG	4294967298	webserver/testHandler.go:42	testPost
+2019-08-02T06:23:38.677+0800	DEBUG	4294967298	webserver/testHandler.go:42	simplePostHandler
 2019-08-02T06:23:38.677+0800	DEBUG	4294967298	webserver/testHandler.go:46	4294967298	{"request": "#0000000100000002 - 127.0.0.1:3001<->127.0.0.1:64674 - POST http://localhost:3001/post"}
 2019-08-02T06:23:38.677+0800	DEBUG	4294967298	webserver/testHandler.go:50	4294967298	{"key": "Host", "value": "localhost:3001"}
 2019-08-02T06:23:38.677+0800	DEBUG	4294967298	webserver/testHandler.go:50	4294967298	{"key": "Content-Length", "value": "183"}
@@ -351,7 +351,7 @@ client side
 
 define handler as a function
 ```
-func Hello() func(ctx *fasthttp.RequestCtx) {
+func helloWorldGetHandler() func(ctx *fasthttp.RequestCtx) {
 	return func(ctx *fasthttp.RequestCtx) {
 		tid := strconv.FormatInt(int64(ctx.ID()), 10)
 
@@ -373,7 +373,7 @@ func TestHello(t *testing.T) {
 	// setup fasthttp server 
     addr := ":3000"
     s := &fasthttp.Server{
-        Handler: Hello(),
+        Handler: helloWorldGetHandler(),
     }
     // setup listener 
     ln, _ := reuseport.Listen("tcp4", addr)
@@ -410,11 +410,11 @@ func TestHello(t *testing.T) {
 
 juse like **4.1** but in method mode
 ```
-func (ws *webServer) hello() func(ctx *fasthttp.RequestCtx) {
+func (ws *webServer) helloWorldGetHandler() func(ctx *fasthttp.RequestCtx) {
 	return func(ctx *fasthttp.RequestCtx) {
 		tid := strconv.FormatInt(int64(ctx.ID()), 10)
 		log := ws.Log.Named(tid)
-		log.Debug("hello")
+		log.Debug("helloWorldGetHandler")
 
 		if ws.debug {
 			ctx.Request.Header.VisitAll(func(key, value []byte) {
@@ -456,7 +456,7 @@ func TestWebServer_hello(t *testing.T) {
     // setup fasthttp server
 
     s := &fasthttp.Server{
-        Handler: ws.hello(),
+        Handler: ws.helloWorldGetHandler(),
         Logger:  flog,
     }
 
@@ -499,11 +499,11 @@ func TestWebServer_hello(t *testing.T) {
 ```
 /go/src/github.com/tsingson/fasthttp-example/webserver   go test -v .
 === RUN   TestWebServer_hello
-2019-10-26T19:16:34.695+0800	DEBUG	4294967297	hello
-2019-10-26T19:16:34.695+0800	DEBUG	4294967297	4294967297	{"key": "Host", "value": "google.com"}
-2019-10-26T19:16:34.695+0800	DEBUG	4294967297	4294967297	{"key": "Content-Length", "value": "0"}
-2019-10-26T19:16:34.695+0800	DEBUG	4294967297	4294967297	{"key": "User-Agent", "value": "fasthttp"}
-2019-10-26T19:16:34.695+0800	DEBUG	4294967297	4294967297	{"http payload": ""}
+2019-10-26T19:25:15.197+0800	DEBUG	4294967297	helloWorldGetHandler
+2019-10-26T19:25:15.197+0800	DEBUG	4294967297	4294967297	{"key": "Host", "value": "google.com"}
+2019-10-26T19:25:15.197+0800	DEBUG	4294967297	4294967297	{"key": "Content-Length", "value": "0"}
+2019-10-26T19:25:15.197+0800	DEBUG	4294967297	4294967297	{"key": "User-Agent", "value": "fasthttp"}
+2019-10-26T19:25:15.197+0800	DEBUG	4294967297	4294967297	{"http payload": ""}
 --- PASS: TestWebServer_hello (0.00s)
 === RUN   TestHello
 --- PASS: TestHello (0.00s)
