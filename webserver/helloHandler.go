@@ -13,9 +13,9 @@ func (ws *webServer) helloWorldGetHandler() func(ctx *fasthttp.RequestCtx) {
 	return func(ctx *fasthttp.RequestCtx) {
 		tid := strconv.FormatInt(int64(ctx.ID()), 10)
 		log := ws.Log.Named(tid)
-		log.Debug("helloWorldGetHandler")
 
 		if ws.debug {
+			log.Debug("helloWorldGetHandler")
 			ctx.Request.Header.VisitAll(func(key, value []byte) {
 				// log.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
 				log.Debug(tid, zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
