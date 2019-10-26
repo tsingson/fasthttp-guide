@@ -493,7 +493,32 @@ func TestWebServer_hello(t *testing.T) {
 ```
 
 
+
+### 4.3 run test
+
+```
+/go/src/github.com/tsingson/fasthttp-example/webserver   go test -v .
+=== RUN   TestWebServer_hello
+2019-10-26T19:16:34.695+0800	DEBUG	4294967297	hello
+2019-10-26T19:16:34.695+0800	DEBUG	4294967297	4294967297	{"key": "Host", "value": "google.com"}
+2019-10-26T19:16:34.695+0800	DEBUG	4294967297	4294967297	{"key": "Content-Length", "value": "0"}
+2019-10-26T19:16:34.695+0800	DEBUG	4294967297	4294967297	{"key": "User-Agent", "value": "fasthttp"}
+2019-10-26T19:16:34.695+0800	DEBUG	4294967297	4294967297	{"http payload": ""}
+--- PASS: TestWebServer_hello (0.00s)
+=== RUN   TestHello
+--- PASS: TestHello (0.00s)
+PASS
+ok  	github.com/tsingson/fasthttp-example/webserver	0.015s
+
+```
+
+
+
 cool, just try it by yourself.
+
+
+
+
 
 
 ## 5. license
