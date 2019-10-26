@@ -11,7 +11,7 @@ require (
 	github.com/prometheus/client_golang v1.1.0
 	github.com/sanity-io/litter v1.1.0
 	github.com/savsgio/gotils v0.0.0-20190714152828-365999d0a274
-	github.com/stretchr/testify v1.4.0 // indirect
+	github.com/stretchr/testify v1.4.0
 	github.com/valyala/fasthttp v1.5.0
 	go.uber.org/atomic v1.4.0 // indirect
 	go.uber.org/multierr v1.1.0 // indirect

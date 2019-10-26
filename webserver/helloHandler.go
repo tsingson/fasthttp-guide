@@ -31,3 +31,15 @@ func (ws *webServer) hello() func(ctx *fasthttp.RequestCtx) {
 		return
 	}
 }
+
+func Hello() func(ctx *fasthttp.RequestCtx) {
+	return func(ctx *fasthttp.RequestCtx) {
+		tid := strconv.FormatInt(int64(ctx.ID()), 10)
+
+		ctx.Request.Header.Add("tid", tid)
+		ctx.SetContentType(ContentText)
+		ctx.SetStatusCode(200)
+		ctx.SetBody([]byte(`hello world`))
+		return
+	}
+}
