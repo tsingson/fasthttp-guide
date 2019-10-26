@@ -25,7 +25,7 @@ func TestWebServer_hello(t *testing.T) {
 	// setup fasthttp server
 
 	s := &fasthttp.Server{
-		Handler: ws.hello(),
+		Handler: ws.helloWorldGetHandler(),
 		Logger:  flog,
 	}
 
