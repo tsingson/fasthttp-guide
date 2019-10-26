@@ -64,7 +64,7 @@ func TestWebServer_hello(t *testing.T) {
 	assert.Equal(t, body, []byte(`hello world`))
 }
 
-func TestWebServer_hello1(t *testing.T) {
+func TestWebServer_hello2(t *testing.T) {
 	// setup logger that output to console
 	log := logger.Console()
 	ws := &webServer{
