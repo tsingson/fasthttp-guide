@@ -3,15 +3,33 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
+	"os"
+	"time"
 
 	"github.com/integrii/flaggy"
+	"github.com/tsingson/logger"
 	"github.com/valyala/fasthttp"
+	"github.com/valyala/fasthttp/reuseport"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+
+	"github.com/tsingson/fasthttp-guide/pkg/utils"
 )
 
+var log *logger.Logger
+
 func main() {
+	log = logger.New(
+		logger.WithDebug(),
+		// logger.WithStoreInDay(),
+		// logger.WithDays(31),
+		logger.WithLevel(zapcore.DebugLevel))
+	defer log.Sync()
+
+	log.Info("try to start fasthttp web server")
+
 	addr := ":3001"
-	compress := false
+	compress := true
 
 	flaggy.String(&addr, "addr", "address", "TCP address to listen to")
 	flaggy.Bool(&compress, "c", "compress", "Whether to enable transparent response compression")
@@ -23,12 +41,37 @@ func main() {
 		h = fasthttp.CompressHandler(h)
 	}
 
-	if err := fasthttp.ListenAndServe(addr, h); err != nil {
-		log.Fatalf("Error in ListenAndServe: %s", err)
+	s := &fasthttp.Server{
+		Handler: h,
+		Logger:  log,
 	}
+
+	// reuse port
+	ln, err := reuseport.Listen("tcp4", addr) //  s.Cfg.ProxyConfig.ServerPort) // ":8095") //
+	// s.ln, err = net.Listen("tcp4", stbmodel.AAAPort) //  s.Cfg.ProxyConfig.ServerPort) // ":8095") //
+	if err != nil {
+		log.Error("connect error",
+			zap.String("addr", addr),
+			zap.Error(err))
+		time.Sleep(1 * time.Second)
+		os.Exit(-1)
+	}
+
+	err = s.Serve(ln)
+
+	if err != nil {
+		log.Error("fasthttp web server start error",
+			zap.String("addr", addr),
+			zap.Error(err))
+		time.Sleep(1 * time.Second)
+		os.Exit(-1)
+	}
+
 }
 
 func requestHandler(ctx *fasthttp.RequestCtx) {
+
+	utils.RequestCtxDebug(ctx, log.Log, true)
 	fmt.Fprintf(ctx, "Hello, world!\n\n")
 
 	fmt.Fprintf(ctx, "Request method is %q\n", ctx.Method())
@@ -55,8 +98,7 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 	c.SetValue("cookie-value")
 	ctx.Response.Header.SetCookie(&c)
 
-	payload := ctx.Request.Body()
-
-	ctx.Response.SetBody(payload)
+	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", ctx.Request.Body())
+	// ctx.Response.SetBody(payload)
 
 }

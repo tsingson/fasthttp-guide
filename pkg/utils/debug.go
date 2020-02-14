@@ -43,6 +43,11 @@ func RequestCtxDebug(ctx *fasthttp.RequestCtx, log *zap.Logger, payloadDetail bo
 // RequestDebug log request all field
 func RequestDebug(req *fasthttp.Request, log *zap.Logger, payloadDetail bool) {
 	log.Info(" Request  ==================================================================================")
+	log.Info("header string", zap.String("header", req.Header.String()))
+
+	log.Info("http method", zap.String("method", B2S(req.Header.Method())))
+	log.Info("request target", zap.String("URL", B2S(req.Header.RequestURI())))
+	log.Info("host", zap.String("host", B2S(req.Header.Host())))
 
 	req.Header.VisitAll(func(key, value []byte) {
 		// log.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
@@ -63,6 +68,7 @@ func RequestDebug(req *fasthttp.Request, log *zap.Logger, payloadDetail bool) {
 func ResponseDebug(resp *fasthttp.Response, log *zap.Logger, payloadDetail bool) {
 	log.Info(" Response  ==================================================================================")
 
+	log.Info("header string", zap.String("header", resp.Header.String()))
 	log.Info("http status code",
 		zap.Int("code", resp.StatusCode()))
 
