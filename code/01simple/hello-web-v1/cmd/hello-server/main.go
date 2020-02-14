@@ -66,11 +66,9 @@ func main() {
 		time.Sleep(1 * time.Second)
 		os.Exit(-1)
 	}
-
 }
 
 func requestHandler(ctx *fasthttp.RequestCtx) {
-
 	utils.RequestCtxDebug(ctx, log.Log, true)
 	fmt.Fprintf(ctx, "Hello, world!\n\n")
 
@@ -100,5 +98,4 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", ctx.Request.Body())
 	// ctx.Response.SetBody(payload)
-
 }

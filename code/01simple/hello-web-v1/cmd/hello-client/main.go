@@ -73,5 +73,4 @@ func main() {
 	utils.RequestDebug(request, log.Named("request"), true)
 	log.Debug("=====================================================================")
 	utils.ResponseDebug(response, log.Named("response"), true)
-
 }

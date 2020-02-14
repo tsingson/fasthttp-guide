@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-
 	log := logger.New(
 		logger.WithDebug(),
 		logger.WithStoreInDay(),

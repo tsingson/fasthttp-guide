@@ -13,16 +13,17 @@ func GetCurrentPath() (string, error) {
 
 // GetCurrentExecDir get directory of execute file
 func GetCurrentExecDir() (dir string, err error) {
-	path, err := exec.LookPath(os.Args[0])
+	var path string
+	path, err = exec.LookPath(os.Args[0])
 	if err != nil {
 		// fmt.Printf("exec.LookPath(%s), err: %s\n", os.Args[0], err)
 		return "", err
 	}
-	absPath, err := filepath.Abs(path)
+	path, err = filepath.Abs(path)
 	if err != nil {
 		// fmt.Printf("filepath.Abs(%s), err: %s\n", path, err)
 		return "", err
 	}
-	dir = filepath.Dir(absPath)
+	dir = filepath.Dir(path)
 	return dir, nil
 }

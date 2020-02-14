@@ -6,8 +6,7 @@ import (
 )
 
 func main() {
-
-	var who = flag.String("who", "Golang", "TCP address to listen to")
+	who := flag.String("who", "Golang", "TCP address to listen to")
 
 	flag.Parse()
 
