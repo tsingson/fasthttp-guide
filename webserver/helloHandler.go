@@ -15,14 +15,7 @@ func (ws *webServer) helloWorldGetHandler() func(ctx *fasthttp.RequestCtx) {
 		log := ws.Log.Named(tid)
 
 		if ws.debug {
-			log.Debug("helloWorldGetHandler")
-			ctx.Request.Header.VisitAll(func(key, value []byte) {
-				// log.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
-				log.Debug(tid, zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
-			})
-
-			log.Debug(tid, zap.String("http payload", goutils.B2S(ctx.Request.Body())))
-
+			requestDebug(ctx, log)
 		}
 
 		ctx.SetContentType(ContentText)
@@ -30,6 +23,32 @@ func (ws *webServer) helloWorldGetHandler() func(ctx *fasthttp.RequestCtx) {
 		ctx.SetBody([]byte(`hello world`))
 		return
 	}
+}
+
+func requestDebug(ctx *fasthttp.RequestCtx, log *zap.Logger) {
+	tid := strconv.FormatInt(int64(ctx.ID()), 10)
+	log.Debug("helloWorldGetHandler")
+
+	uri := ctx.RequestURI()
+
+	log.Debug(string(uri))
+
+	args := ctx.QueryArgs()
+
+	if args.Len() > 0 {
+		args.VisitAll(
+			func(key, value []byte) {
+				// log.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+				log.Debug(tid, zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
+			})
+	}
+
+	ctx.Request.Header.VisitAll(func(key, value []byte) {
+		// log.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+		log.Debug(tid, zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
+	})
+
+	log.Debug(tid, zap.String("http payload", goutils.B2S(ctx.Request.Body())))
 }
 
 func Hello() func(ctx *fasthttp.RequestCtx) {
