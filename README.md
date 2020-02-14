@@ -1,4 +1,6 @@
-# fasthttp-example
+# fasthttp-guide ( Build Web Application via FastHTTP )
+
+step by step to build web application via [fasthttp](https://github.com/valyala/fasthttp) -- Fast HTTP implementation for Go
 
 
 ## 0. reference 
