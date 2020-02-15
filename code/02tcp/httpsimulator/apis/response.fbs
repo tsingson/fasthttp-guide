@@ -1,0 +1,48 @@
+namespace simulator;
+
+attribute "priority";
+
+
+table StatusLine {
+  Version:string;
+  StatusCode:int;
+  StatusText:string;
+
+}
+
+/// Header
+/// Transfer-Encoding
+/// Content-Encoding
+/// Content-Location
+/// Content-Range
+/// Content-Type
+/// Date
+/// Server
+/// Status-Code
+
+table Header {
+    key:[ubyte];
+    value:[ubyte];
+}
+
+
+/// HTTPayload cache
+table Response {
+    Status:StatusLine;
+    Headers:[Header];
+    payload:[ubyte];
+}
+
+enum Method:short { GET = 0, POST=1, PATCH=2, DELETE = 3 }
+table Startline {
+   method:Method;
+   URL:string;
+   Version:string;
+}
+
+/// HTTPayload cache
+table Request {
+    Start:Startline;
+    Headers:[Header];
+    payload:[ubyte];
+}

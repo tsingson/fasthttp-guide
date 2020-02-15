@@ -1,0 +1,12 @@
+namespace simulator;
+
+attribute "priority";
+
+table URL {
+	Protocol:string;
+	IPAddress:string;
+	Port:int;
+	Path:string;
+	Parameters:string;
+	Anchor:string;
+}

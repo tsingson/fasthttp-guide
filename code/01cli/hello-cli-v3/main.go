@@ -28,7 +28,7 @@ func main() {
 	flaggy.Parse()
 
 	fmt.Println("Hello World, ", who)
-	log.Info("hello-cli-v3", zap.String("input", who))
+	log.Info("hello-01cli-v3", zap.String("input", who))
 
 	time.Sleep(3 * time.Millisecond)
 }

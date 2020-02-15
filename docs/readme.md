@@ -1,8 +1,8 @@
 # how to use fasthttp in production
 
 - 1.Go environment configuration
-	- 1.1. Go Installation
-	- 1.2. development tools 
+	- 1.1. Go Installation ( compiler and tools)
+	- 1.2. IDE and other tools 
        goland / postman / browser / terminal / git / github 
 - 2.Go basic knowledge
 	- 2.1. first Go application / build / running 

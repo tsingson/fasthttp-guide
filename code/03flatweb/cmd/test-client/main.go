@@ -5,7 +5,7 @@ import (
 	"github.com/savsgio/gotils"
 	"github.com/valyala/fasthttp"
 
-	"github.com/tsingson/fasthttp-guide/code/02recommended/webclient"
+	"github.com/tsingson/fasthttp-guide/code/03flatweb/webclient"
 )
 
 func main() {

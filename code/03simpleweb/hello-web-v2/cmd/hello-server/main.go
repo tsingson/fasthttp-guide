@@ -35,8 +35,8 @@ func main() {
 	// -------------------------------------------------------
 	// Create custom server.
 	s := &fasthttp.Server{
-		Handler: requestHandler,        // 注意这里
-		Name:    "hello-cli-v1 server", // 服务器名称
+		Handler: requestHandler,          // 注意这里
+		Name:    "hello-01cli-v1 server", // 服务器名称
 	}
 	// -------------------------------------------------------
 	// 运行服务端程序
