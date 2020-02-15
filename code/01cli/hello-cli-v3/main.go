@@ -13,7 +13,6 @@ import (
 func main() {
 	log := logger.New(
 		logger.WithDebug(),
-		logger.WithStoreInDay(),
 		logger.WithDays(31),
 		logger.WithLevel(zapcore.DebugLevel))
 	defer log.Sync()

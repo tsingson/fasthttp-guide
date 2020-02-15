@@ -23,7 +23,11 @@ func echoServer(w *gaio.Watcher) {
 		for _, res := range results {
 			switch res.Operation {
 			case gaio.OpRead: // read completion event
-				if res.Error == nil {
+				if res.Error != nil {
+					w.Free(res.Conn)
+					continue
+				}
+				if res.Size > 0  {
 					// send back everything, we won't start to read again until write completes.
 					// submit an async write request
 

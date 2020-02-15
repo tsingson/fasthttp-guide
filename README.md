@@ -6,8 +6,8 @@ step by step to build web application via [fasthttp](https://github.com/valyala/
 ## 0. reference 
 
 1. [GopherCon 2019 - How I write HTTP web services after eight years](https://about.sourcegraph.com/go/gophercon-2019-how-i-write-http-web-services-after-eight-years)
-
 1. [chinese guide ----> go语言Fasthttp实践系列(1) helloWorldGetHandler World](https://juejin.im/post/5d446c15e51d4561fd6cb46f)
+1. [about HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP)
 
 
 ## 1. fasthttp server side
