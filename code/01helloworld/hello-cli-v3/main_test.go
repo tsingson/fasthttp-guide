@@ -11,7 +11,6 @@ import (
 func TestRun(t *testing.T) {
 	as := assert.New(t)
 
-	// args := []string{"hello", "-who=tsingson"}
 	args := []string{"./program", "-who=tsingson"}
 	var stdout bytes.Buffer
 
