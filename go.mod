@@ -10,7 +10,7 @@ require (
 	github.com/sanity-io/litter v1.2.0
 	github.com/savsgio/gotils v0.0.0-20200117113501-90175b0fbe3f
 	github.com/stretchr/testify v1.4.0
-	github.com/tsingson/logger v1.0.2
+	github.com/tsingson/logger v1.0.3
 	github.com/valyala/fasthttp v1.9.0
 	github.com/xtaci/gaio v1.2.7
 	go.uber.org/zap v1.13.0

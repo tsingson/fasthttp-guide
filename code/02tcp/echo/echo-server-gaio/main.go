@@ -27,7 +27,7 @@ func echoServer(w *gaio.Watcher) {
 					w.Free(res.Conn)
 					continue
 				}
-				if res.Size > 0  {
+				if res.Size > 0 {
 					// send back everything, we won't start to read again until write completes.
 					// submit an async write request
 
@@ -58,7 +58,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("echo server listening on", ln.Addr())
+	log.Println("echo httpserver listening on", ln.Addr())
 
 	for {
 		conn, err := ln.Accept()
@@ -66,7 +66,7 @@ func main() {
 			log.Println(err)
 			return
 		}
-		log.Println("new client", conn.RemoteAddr())
+		log.Println("new httpclient", conn.RemoteAddr())
 
 		// submit the first async read IO request
 		err = w.Read(nil, conn, make([]byte, 128))
