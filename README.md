@@ -9,6 +9,12 @@ step by step to build web application via [fasthttp](https://github.com/valyala/
 
 1. [chinese guide ----> go语言Fasthttp实践系列(1) helloWorldGetHandler World](https://juejin.im/post/5d446c15e51d4561fd6cb46f)
 
+## 0. note
+
+I had built some business project with golang about 5 years. And use fasthttp in different projects over 2 years. fasthttp help to build high performance API server / web server / proxy, etc. I had shared some good practice and experience of fasthttp to friends in tech meet up. It’s excited for me to share something, and friends enjoy on it. So, I write this booklet to help some developer that work in a web application.
+
+There are some different between ‘standard’ go net/http and fasthttp. I will clarify the different , show out the How/when/why to use fasthttp. show ideas, basic usage and experience of fasthttp.
+
 
 ## 1. fasthttp server side
 
