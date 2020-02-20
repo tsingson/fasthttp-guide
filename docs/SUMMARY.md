@@ -8,7 +8,7 @@
 		- Acknowledgements   
 - 1. Go Basic
 	- 1.0 about Golang
-		go module
+		go module and version 
 	- 1.1 Go environment setup
 		Go Installation ( compiler and tools)
 		IDE and other tools ( goland / postman / browser / terminal / git / github )

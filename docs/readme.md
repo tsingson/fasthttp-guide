@@ -2,15 +2,35 @@
 
 ## 1. 动机 Motivation
 
+I had built some  business project via golang about 5 years. And use fasthttp in those projects over 2 years. I had shared some good practice and experience of fasthttp within friends.  It’s excited for me to share something of fasthttp, and friends enjoy on it. So, I write this booklet to help some developer that work in a web application.
+
+There are  some different between ‘standard’ go net/http and FastHTTP. I will clarify the different , show out the How/when/why to use fasthttp.  show ideas, basic usage and experience of fasthttp.
+
+
+
+after success running several business projects via FastHTTP at past 3 years, I had shared some good practice and experience of fasthttp within friends and developer group. 
+It's excited for me to share something of fasthttp and friends enjoy on it. so, I write this booklet to help some developer that begin to work in web application.
+
+thought the hotting  discussion in reddit, there some different between 'standard' go net/http and FastHTTP, i will clarify the different , show out the How/when/why to use fasthttp. also,  I collected some excellent articles about FastHTTP that help to introduce the implementation ideas of fasthttp, basics usage and experience
+
+在过去 3 年中，通过 FastHTTP 成功运行了多个业务项目后，我在朋友和开发人员小组中分享了一些快速http的良好做法和经验。
+我很高兴能分享一些快速http的技巧，朋友们喜欢它。因此，我写这本小册子是为了帮助一些开始在 Web 应用程序中工作的开发人员。
+
+认为在reddit的热议，有一些不同的'标准'去网/http和FastHTTP之间，我会澄清不同，显示如何/何时/为什么使用快速http。此外，我收集了一些关于 FastHTTP 的优秀文章，这些文章有助于介绍 fasthttp 的实现思路、基本使用和经验
+
+
+
 近3年来, fasthttp 被我用在几个重大项目(对我而言, 项目有多重大, 与收钱的多少成正比) 中,  FastHTTP 在生产环境中应用积累了一些经验, 写了一些小文章介绍 FastHTTP 的开发.
 
 考虑到 FastHTTP 的开发思路与 Golang 标准 net/http 库有很大不同,  索性写成一本小册子, 汇集众多 FastHTTP 的优秀文章, 介绍 fasthttp 的实现思路, 个人实际使用与经验得失.
 
  
 
-In the past 3 years, I have used fasthttp in several major projects (for me, how important the project is, which is proportional to the amount of money collected), FastHTTP has accumulated some experience in the production environment, and wrote some small articles Introduce the development of FastHTTP.
+after success running several business projects via FastHTTP at past 3 years, I had shared some good practice and experience of fasthttp within friends and developer group. 
+It's excited for me to share some skills of fasthttp and friends enjoy on it. so, I write this booklet to help some developer that begin to work in web application.
 
-Considering that the development idea of FastHTTP is very different from the Golang standard net / http library, I simply wrote a booklet that brings together many excellent articles of FastHTTP to introduce the implementation ideas of fasthttp, personal actual use and experience gains and losses.
+
+thought the hotting  discussion in reddit, there some different between 'standard' go net/http and FastHTTP, i will clarify the different , show out the How/when/why to use fasthttp. also,  I collected some excellent articles about FastHTTP that help to introduce the implementation ideas of fasthttp, basics usage and experience
 
 this booklet is inspired by [https://github.com/astaxie/build-web-application-with-golang](https://github.com/astaxie/build-web-application-with-golang)
 
