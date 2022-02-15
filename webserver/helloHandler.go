@@ -6,7 +6,7 @@ import (
 	"github.com/valyala/fasthttp"
 	"go.uber.org/zap"
 
-	"github.com/tsingson/fasthttp-example/pkg/goutils"
+	"github.com/tsingson/fasthttp-guide/pkg/vtils"
 )
 
 func (ws *webServer) helloWorldGetHandler() func(ctx *fasthttp.RequestCtx) {
@@ -17,11 +17,11 @@ func (ws *webServer) helloWorldGetHandler() func(ctx *fasthttp.RequestCtx) {
 		if ws.debug {
 			log.Debug("helloWorldGetHandler")
 			ctx.Request.Header.VisitAll(func(key, value []byte) {
-				// log.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
-				log.Debug(tid, zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
+
+				log.Debug(tid, zap.String("key", vtils.B2S(key)), zap.String("value", vtils.B2S(value)))
 			})
 
-			log.Debug(tid, zap.String("http payload", goutils.B2S(ctx.Request.Body())))
+			log.Debug(tid, zap.String("http payload", vtils.B2S(ctx.Request.Body())))
 
 		}
 

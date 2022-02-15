@@ -4,13 +4,12 @@ import (
 	"net"
 
 	"github.com/fasthttp/router"
-	"github.com/oklog/run"
 	"github.com/valyala/fasthttp/reuseport"
 
 	"github.com/valyala/fasthttp"
 	"go.uber.org/zap"
 
-	"github.com/tsingson/fasthttp-example/logger"
+	"github.com/tsingson/fasthttp-guide/logger"
 )
 
 const (
@@ -68,14 +67,7 @@ func (ws *webServer) Run() (err error) {
 		Logger:             lg,
 	}
 
-	// run fasthttp serv
-	var g run.Group
-	g.Add(func() error {
-		return s.Serve(ws.ln)
-	}, func(e error) {
-		_ = ws.ln.Close()
-	})
-	return g.Run()
+	return s.Serve(ws.ln)
 }
 
 // design and code by tsingson

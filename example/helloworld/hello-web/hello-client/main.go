@@ -5,12 +5,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/savsgio/gotils"
 	"github.com/valyala/fasthttp"
 	"go.uber.org/zap"
 
-	"github.com/tsingson/fasthttp-example/logger"
-	"github.com/tsingson/fasthttp-example/pkg/goutils"
+	"github.com/tsingson/fasthttp-guide/logger"
+
+	"github.com/tsingson/fasthttp-guide/pkg/vtils"
 )
 
 func main() {
@@ -78,7 +78,7 @@ func main() {
 	// 设置 HTTP 请求的 HTTP header
 
 	req.Header.SetBytesKV([]byte("Content-Type"), []byte("text/plain; charset=utf8"))
-	req.Header.SetBytesKV([]byte("User-Agent"), []byte("fasthttp-example web client"))
+	req.Header.SetBytesKV([]byte("User-Agent"), []byte("fasthttp-guide web client"))
 	req.Header.SetBytesKV([]byte("Accept"), []byte("text/plain; charset=utf8"))
 	req.Header.SetBytesKV([]byte("TransactionID"), []byte(tid))
 
@@ -114,15 +114,15 @@ func main() {
 		{
 			log.Debug("---------------- HTTP header 每一个键值对-------------")
 			resp.Header.VisitAll(func(key, value []byte) {
-				// l.Info("requestHeader", zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
-				log.Debug(tid, zap.String("key", goutils.B2S(key)), zap.String("value", goutils.B2S(value)))
+
+				log.Debug(tid, zap.String("key", vtils.B2S(key)), zap.String("value", vtils.B2S(value)))
 			})
 
 		}
 		// 取出 web client 请求中的 HTTP payload
 		{
 			log.Debug("---------------- HTTP payload -------------")
-			log.Debug(tid, zap.String("http payload", gotils.B2S(resp.Body())))
+			log.Debug(tid, zap.String("http payload", vtils.B2S(resp.Body())))
 		}
 	}
 }

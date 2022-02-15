@@ -6,7 +6,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/tsingson/fasthttp-example/webserver"
+	"github.com/tsingson/fasthttp-guide/webserver"
 )
 
 func main() {

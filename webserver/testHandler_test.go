@@ -9,7 +9,7 @@ import (
 	"github.com/valyala/fasthttp"
 	"github.com/valyala/fasthttp/fasthttputil"
 
-	"github.com/tsingson/fasthttp-example/logger"
+	"github.com/tsingson/fasthttp-guide/logger"
 )
 
 func TestWebServer_simplePostHandler(t *testing.T) {
