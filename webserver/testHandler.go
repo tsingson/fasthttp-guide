@@ -17,12 +17,9 @@ func (ws *webServer) simpleGetHandler() func(ctx *fasthttp.RequestCtx) {
 		if ws.debug {
 			l.Debug(tid, zap.String("request", ctx.String()))
 			ctx.Request.Header.VisitAll(func(key, value []byte) {
-
 				l.Debug(tid, zap.String("key", vtils.B2S(key)), zap.String("value", vtils.B2S(value)))
 			})
-
 			l.Debug(tid, zap.String("http payload", vtils.B2S(ctx.Request.Body())))
-
 		}
 
 		ctx.SetContentType(ContentRest)
@@ -37,7 +34,6 @@ func (ws *webServer) simplePostHandler() func(ctx *fasthttp.RequestCtx) {
 		// var tid = strconv.FormatInt(int64(ctx.ID()), 10)
 		tid := vtils.B2S(ctx.Request.Header.Peek("TransactionID"))
 		l := ws.Log.Named(tid)
-
 		if ws.debug {
 			l.Debug("simplePostHandler")
 			l.Debug(tid, zap.String("request", ctx.String()))
