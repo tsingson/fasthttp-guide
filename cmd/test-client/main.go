@@ -2,10 +2,12 @@ package main
 
 import (
 	"github.com/sanity-io/litter"
-	"github.com/savsgio/gotils"
+
 	"github.com/valyala/fasthttp"
 
-	"github.com/tsingson/fasthttp-example/webclient"
+	"github.com/tsingson/fasthttp-guide/webclient"
+
+	"github.com/tsingson/fasthttp-guide/pkg/vtils"
 )
 
 func main() {
@@ -19,7 +21,7 @@ func main() {
 	if err != nil {
 	}
 	if resp != nil {
-		litter.Dump(gotils.B2S(resp.Body()))
+		litter.Dump(vtils.B2S(resp.Body()))
 	}
 	// clean-up
 	fasthttp.ReleaseResponse(resp)
@@ -35,7 +37,7 @@ func main() {
 	if er1 != nil {
 	}
 	if resp1 != nil {
-		litter.Dump(gotils.B2S(resp1.Body()))
+		litter.Dump(vtils.B2S(resp1.Body()))
 	}
 	// clenn-up
 	fasthttp.ReleaseResponse(resp1)

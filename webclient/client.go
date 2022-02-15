@@ -3,12 +3,12 @@ package webclient
 import (
 	"time"
 
-	"github.com/savsgio/gotils"
-
-	"github.com/tsingson/fasthttp-example/logger"
+	"github.com/tsingson/fasthttp-guide/logger"
 
 	"github.com/valyala/fasthttp"
 	"go.uber.org/zap"
+
+	"github.com/tsingson/fasthttp-guide/pkg/vtils"
 )
 
 const (
@@ -73,7 +73,7 @@ func (w *WebClient) FastPostByte(requestURI string, body []byte) (*fasthttp.Resp
 	// fmt.Println("---------- req --------------")
 	if w.Debug {
 		req.Header.VisitAll(func(key, value []byte) {
-			log.Debug(w.TransactionID, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+			log.Debug(w.TransactionID, zap.String("key", vtils.B2S(key)), zap.String("value", vtils.B2S(value)))
 		})
 		log.Debug(w.TransactionID)
 	}
@@ -93,9 +93,9 @@ func (w *WebClient) FastPostByte(requestURI string, body []byte) (*fasthttp.Resp
 		log.Debug(w.TransactionID, zap.Duration("elapsed", elapsed))
 		log.Debug(w.TransactionID, zap.Int("http status code", resp.StatusCode()))
 		resp.Header.VisitAll(func(key, value []byte) {
-			log.Debug(w.TransactionID, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+			log.Debug(w.TransactionID, zap.String("key", vtils.B2S(key)), zap.String("value", vtils.B2S(value)))
 		})
-		log.Debug(w.TransactionID, zap.String("http payload", gotils.B2S(resp.Body())))
+		log.Debug(w.TransactionID, zap.String("http payload", vtils.B2S(resp.Body())))
 	}
 
 	// just for demo
@@ -130,7 +130,7 @@ func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 
 	if w.Debug {
 		req.Header.VisitAll(func(key, value []byte) {
-			log.Debug(w.TransactionID, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+			log.Debug(w.TransactionID, zap.String("key", vtils.B2S(key)), zap.String("value", vtils.B2S(value)))
 		})
 		log.Debug(w.TransactionID)
 	}
@@ -150,9 +150,9 @@ func (w *WebClient) FastGet(requestURI string) (*fasthttp.Response, error) {
 		log.Debug(w.TransactionID, zap.Duration("elapsed", elapsed))
 		log.Debug(w.TransactionID, zap.Int("http status code", resp.StatusCode()))
 		resp.Header.VisitAll(func(key, value []byte) {
-			log.Debug(w.TransactionID, zap.String("key", gotils.B2S(key)), zap.String("value", gotils.B2S(value)))
+			log.Debug(w.TransactionID, zap.String("key", vtils.B2S(key)), zap.String("value", vtils.B2S(value)))
 		})
-		log.Debug(w.TransactionID, zap.String("http payload", gotils.B2S(resp.Body())))
+		log.Debug(w.TransactionID, zap.String("http payload", vtils.B2S(resp.Body())))
 	}
 
 	// add your logic code here

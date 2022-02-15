@@ -10,7 +10,7 @@ import (
 	"github.com/valyala/fasthttp"
 	"go.uber.org/zap"
 
-	"github.com/tsingson/fasthttp-example/logger"
+	"github.com/tsingson/fasthttp-guide/logger"
 )
 
 const (

@@ -10,7 +10,7 @@ import (
 	"github.com/valyala/fasthttp/fasthttputil"
 	"github.com/valyala/fasthttp/reuseport"
 
-	"github.com/tsingson/fasthttp-example/logger"
+	"github.com/tsingson/fasthttp-guide/logger"
 )
 
 func TestWebServer_hello(t *testing.T) {
